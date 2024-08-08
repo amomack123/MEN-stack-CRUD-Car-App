@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
   comment: {
@@ -7,11 +7,11 @@ const commentSchema = new mongoose.Schema({
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }
-})
+    ref: 'User',
+  },
+});
 
-const watchSchema = new mongoose.Schema({
+const carSchema = new mongoose.Schema({
   year: {
     type: Number,
     required: true,
@@ -37,7 +37,7 @@ const watchSchema = new mongoose.Schema({
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   price: {
     type: Number,
@@ -52,10 +52,10 @@ const watchSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-    }
+    },
   ],
-})
+});
 
-const Watch = mongoose.model('Car', watchSchema)
+const Car = mongoose.model('Car', carSchema);
 
-module.exports = Car
+module.exports = Car;
