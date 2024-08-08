@@ -1,61 +1,34 @@
 const mongoose = require('mongoose');
 
-const commentSchema = new mongoose.Schema({
-  comment: {
-    type: String,
-    required: true,
-  },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
-});
-
-const carSchema = new mongoose.Schema({
-  year: {
-    type: Number,
-    required: true,
-  },
-  brand: {
-    type: String,
-    required: true,
-  },
-  model: {
-    type: String,
-    required: true,
-  },
-  color: {
-    type: String,
-    required: true,
-  },
-  bodyType: {
-    type: String,
-  },
-  condition: {
-    type: String,
-    required: true,
-  },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  isForSale: {
-    type: Boolean,
-    required: true,
-  },
-  commentsByUsers: [commentSchema],
-  favoritedByUsers: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+// Define the user schema
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true
     },
-  ],
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    dateJoined: {
+        type: Date,
+        default: Date.now
+    },
+    favoriteCars: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Car'
+    }]
+    // Add more fields as needed
 });
 
-const Car = mongoose.model('Car', carSchema);
+// Create the User model from the schema
+const User = mongoose.model('User', userSchema);
 
-module.exports = Car;
+// Export the model so it can be used in other parts of the app
+module.exports = User;
