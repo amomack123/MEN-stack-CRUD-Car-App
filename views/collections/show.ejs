@@ -1,0 +1,26 @@
+<!-- views/show.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Collection</title>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <h1>Your Collection</h1>
+  <% if (cars.length === 0) { %>
+    <p>No Cars in your Collection yet.</p>
+  <% } else { %>
+    <ul>
+      <% cars.forEach(car => { %>
+        <li>
+          <h2><%= car.name %> (<%= car.year %>)</h2>
+          <p>Model: <%= car.model %></p>
+          <p>Price: $<%= car.price %></p>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!-- views/partials/navbar.ejs -->
+<nav>
+    <ul>
+      <!-- Link to home page -->
+      <li><a href="/">Home</a></li>
+  
+      <!-- Conditional rendering based on user authentication status -->
+      <% if (user) { %>
+        <!-- Link to user's car collection, dynamically using user ID -->
+        <li><a href="/cars?userId=<%= user._id %>">Your Car Collection</a></li>
+  
+        <!-- Display sign out link -->
+        <li><a href="/signout">Sign Out</a></li>
+      <% } else { %>
+        <!-- Display sign in and sign up links -->
+        <li><a href="/signin">Sign In</a></li>
+        <li><a href="/signup">Sign Up</a></li>
+      <% } %>
+    </ul>
+  </nav>
+  
