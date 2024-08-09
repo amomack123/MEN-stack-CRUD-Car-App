@@ -6,10 +6,12 @@ const car = require('../models/car.js');
 
 ///users/:userId/cares
 
-router.get('/', async (req, res) => {
+router.get('/collections', async (req, res) => {
+  console.log(req.session.user)
   try {
-    const populatedcares = await car.find({ owner: req.session.user }).populate('owner')
-    res.render('cares/index.ejs', { cares: populatedcares })
+    const populatedcares = await car.find({ user: req.session.user._id }).populate('user')
+    console.log(populatedcares)
+    res.render('cares/index.ejs', { cars: populatedcares })
   } catch (error) {
     console.log(error)
     res.redirect('/')
@@ -32,7 +34,7 @@ router.get('/:carId', async (req, res) => {
 
 router.get('/:carId/edit', async (req, res) => {
   try {
-    const editcar = await car.findById(req.params.carId).populate('owner')
+    const editcar = await car.findById(req.params.carId).populate('user')
     res.render('cares/edit.ejs', { car: editcar })
   } catch (error) {
     console.log(error)
@@ -42,14 +44,10 @@ router.get('/:carId/edit', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    req.body.owner = req.session.user._id
-    if (req.body.isForSale === "on") {
-      req.body.isForSale = true;
-    } else {
-      req.body.isForSale = false;
-    }
-    await car.create(req.body)
-    res.redirect(`/users/${req.session.user._id}/cares`)
+    req.body.user = req.session.user._id
+    const newCar = await car.create(req.body)
+    await newCar.save()
+    res.redirect(`/cars`)
   } catch (error) {
     console.log(error)
     res.redirect('/')
@@ -60,9 +58,9 @@ router.post('/', async (req, res) => {
 router.delete('/:carId', async (req, res) => {
   try {
     const currentcar = await car.findById(req.params.carId)
-    if(currentcar.owner.equals(req.session.user._id)) {
+    if(currentcar.user.equals(req.session.user._id)) {
     await currentcar.deleteOne()
-    res.redirect(`/users/${req.session.user._id}/cares`)
+    res.redirect(`/cars/collections`)
   } else {
     res.redirect('/')
   }
@@ -82,7 +80,7 @@ router.put('/:carId', async (req, res) => {
       req.body.isForSale = false
     }
     await car.findByIdAndUpdate(req.params.carId, req.body)
-    res.redirect(`/users/${req.session.user._id}/cares/${req.params.carId}`)
+    res.redirect(`/cars/collections`)
 
   } catch (error) {
     console.log(error)

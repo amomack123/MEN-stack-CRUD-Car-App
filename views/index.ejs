@@ -15,35 +15,6 @@
     <h1>Welcome to Your Car Collection!</h1>
     <p>Manage your car collection here.</p>
 
-    <!-- Add New Car Button -->
-    <div class="add-car">
-      <a href="/cars/new" class="btn">Add New Car</a>
-    </div>
-
-    <!-- Car List -->
-    <div class="car-list">
-      <% if (cars.length > 0) { %>
-        <ul>
-          <% cars.forEach(function(car) { %>
-            <li class="car-item">
-              <h2><%= car.make %> <%= car.model %> (<%= car.year %>)</h2>
-              <p><strong>Price:</strong> $<%= car.price %></p>
-              <p><strong>Description:</strong> <%= car.description %></p>
-              <div class="car-actions">
-                <a href="/cars/<%= car._id %>" class="btn">View</a>
-                <a href="/cars/<%= car._id %>/edit" class="btn">Edit</a>
-                <form action="/cars/<%= car._id %>?_method=DELETE" method="POST" style="display:inline;">
-                  <button type="submit" class="btn">Delete</button>
-                </form>
-              </div>
-            </li>
-          <% }); %>
-        </ul>
-      <% } else { %>
-        <p>No cars in your collection yet. <a href="/cars/new">Add one now!</a></p>
-      <% } %>
-    </div>
-  </div>
 
 </body>
 </html>

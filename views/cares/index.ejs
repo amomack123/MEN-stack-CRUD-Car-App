@@ -7,6 +7,7 @@
 </head>
 <body>
   <%- include('../partials/navbar.ejs') %>
+  <a href="/cars/new">add a new car!</a>
 
   <h1>All Cars</h1>
   <ul>
@@ -15,10 +16,10 @@
         <h2><%= car.name %> (<%= car.year %>)</h2>
         <p>Model: <%= car.model %></p>
         <p>Price: $<%= car.price %></p>
-        <form action="/collections/add" method="POST">
-          <input type="hidden" name="carId" value="<%= car._id %>">
-          <button type="submit">❤️ Add to Collection</button>
+        <form action="/cars/<%=car._id%>?_method=DELETE" method="POST">
+            <button type = 'submit'>DELETE</button>
         </form>
+        <a href="/cars/<%=car._id%>/edit">Edit Car</a>
       </li>
     <% }) %>
   </ul>

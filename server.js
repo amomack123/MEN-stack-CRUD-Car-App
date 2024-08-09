@@ -3,6 +3,7 @@ dotenv.config();
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const morgan = require('morgan')
 const session = require('express-session');
 const path = require("path");
 const methodOverride = require('method-override');
@@ -27,6 +28,7 @@ mongoose.connection.on('connected', () => {
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(morgan('dev'))
 
 // Session configuration
 app.use(session({
@@ -42,7 +44,6 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware for passing user to home
 app.use(passUserToHome);
 
-// The route to render the index page with the list of cars
 app.get('/', async (req, res) => {
   try {
       const cars = await Car.find(); // Query all cars from your MongoDB collection
@@ -52,10 +53,9 @@ app.get('/', async (req, res) => {
       res.status(500).send('Error retrieving cars');
   }
 });
+
+// Route to display all cars
 app.get('/', (req, res) => {
-  res.render('index', { user: req.user });
-});
-app.get('/cars', (req, res) => {
   const userId = req.query.userId;
   Car.find({ userId: userId }, (err, cars) => {
     if (err) {
@@ -66,15 +66,58 @@ app.get('/cars', (req, res) => {
   });
 });
 
+// Route to render the new car form
+app.get('/collections/new', (req, res) => {
+  res.render('collections/new'); // Render the new car form
+});
 
+// Route to render the edit car form
+app.get('/collections/edit/:id', async (req, res) => {
+  try {
+    const car = await Car.findById(req.params.id); // Find the car by its ID
+    if (!car) {
+      return res.status(404).send('Car not found');
+    }
+    res.render('collections/edit', { car }); // Render the edit form with the car data
+  } catch (err) {
+    console.log('Error retrieving car:', err);
+    res.status(500).send('Error retrieving car');
+  }
+});
 
-
+// Route to display the car collection
+app.get('/collections/show', async (req, res) => {
+  try {
+    const cars = await Car.find(); // Query all cars from your MongoDB collection
+    if (cars.length === 0) {
+      return res.render('collections/show', { cars, message: 'No Cars in your Collection yet.' }); // Render with a message if no cars
+    }
+    res.render('collections/show', { cars }); // Render the collection
+  } catch (err) {
+    console.log('Error retrieving cars:', err);
+    res.status(500).send('Error retrieving cars');
+  }
+});
 
 // Routes
 app.use('/auth', authController);
 app.use('/cars', carsController);
+
+// The route to render the index page with the list of cars
+app.get('/cars', async (req, res) => {
+  try {
+    const cars = await Car.find(); // Query all cars from your MongoDB collection
+    res.render('collections/show', { cars }); // Pass the cars and user to your EJS template
+  } catch (err) {
+    console.log('Error retrieving cars:', err);
+    res.status(500).send('Error retrieving cars');
+  }
+});
+
 app.use(isSignedIn);
+app.use('/stylesheets', express.static('stylesheets'));
 
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
 });
+

@@ -25,6 +25,10 @@ const carSchema = new mongoose.Schema({
     description: {
         type: String,
         required: false
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
     // Add more fields as needed
 });
