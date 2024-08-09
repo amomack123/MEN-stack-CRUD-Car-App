@@ -3,11 +3,11 @@ Description
 This Car APP is a web application for people to share/sell cars. Users can view, add, edit, and delete cars into their own private car collection - whcih is a collection of cars they like. Users can also mark animals as favorites.
 
 ScreenShots
-/Users/amogh/code/ga/projects/MEN-stack-CRUD-Car-App/images/Screenshot 2024-08-09 at 9.44.57 AM.png
-/Users/amogh/code/ga/projects/MEN-stack-CRUD-Car-App/images/Screenshot 2024-08-09 at 9.45.06 AM.png
-/Users/amogh/code/ga/projects/MEN-stack-CRUD-Car-App/images/Screenshot 2024-08-09 at 9.45.14 AM.png
-/Users/amogh/code/ga/projects/MEN-stack-CRUD-Car-App/images/Screenshot 2024-08-09 at 9.45.37 AM.png
-/Users/amogh/code/ga/projects/MEN-stack-CRUD-Car-App/images/Screenshot 2024-08-09 at 9.46.14 AM.png
+![Screenshot 1](images/Screenshot-2024-08-09-at-9.44.57-AM.png)
+![Screenshot 2](images/Screenshot-2024-08-09-at-9.45.06-AM.png)
+![Screenshot 3](images/Screenshot-2024-08-09-at-9.45.14-AM.png)
+![Screenshot 4](images/Screenshot-2024-08-09-at-9.45.37-AM.png)
+![Screenshot 5](images/Screenshot-2024-08-09-at-9.46.14-AM.png)
 
 Technologies
 ![MongoDB](https://img.shields.io/badge/-MongoDB-05122A?style=flat&logo=mongodb)
@@ -24,8 +24,8 @@ Technologies
 
 ## :satellite: Upcoming Features
 
-- [:star:] Adding Image Attribute associated with the cars
+- [] Adding Image Attribute associated with the cars
 
-- [:x:] More car themey background
+- [] More car themey background
 
 
