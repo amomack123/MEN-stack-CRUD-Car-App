@@ -3,12 +3,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Your Collection</title>
+  <title>Total Cars</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
   <%- include('../partials/navbar') %>
 
-  <h1>Your Collection</h1>
+  <h1>All Available Cars</h1>
   <% if (cars.length === 0) { %>
     <p>No Cars in your Collection yet.</p>
   <% } else { %>

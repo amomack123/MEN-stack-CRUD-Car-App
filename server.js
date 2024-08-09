@@ -15,6 +15,7 @@ const passUserToHome = require('./middleware/pass-user-to-home.js');
 
 // Import your Car model
 const Car = require('./models/car.js'); // Make sure this path is correct
+const User = require('./models/user.js');
 
 const port = process.env.PORT || '3000';
 
@@ -113,6 +114,70 @@ app.get('/cars', async (req, res) => {
     res.status(500).send('Error retrieving cars');
   }
 });
+
+
+
+
+// Route to handle adding a new car
+app.post('/users/:userId/cars', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { name, model, year, color, price, description } = req.body;
+
+    // Create a new car object with the user reference
+    const newCar = new Car({
+      name,
+      model,
+      year,
+      color,
+      price,
+      description,
+      user: userId // Reference to the user who created the car
+    });
+
+    // Save the car to the database
+    await newCar.save();
+
+    // Redirect the user to their collection page
+    res.redirect(`/users/${userId}/collections/show`);
+  } catch (err) {
+    console.error(err);
+    res.redirect('/');
+  }
+});
+
+
+
+// Route to handle favoriting a car
+app.post('/users/:userId/cars/:carId/favorite', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const carId = req.params.carId;
+
+    // Find the user and add the car to their collection
+    await User.findByIdAndUpdate(userId, {
+      $addToSet: { favorites: carId }
+    });
+
+    // Redirect to the user's collection page
+    res.redirect(`/users/${userId}/collections/show`);
+  } catch (err) {
+    console.error(err);
+    res.redirect('/');
+  }
+});
+
+// Route to display the car collection for a user
+app.get('/users/:userId/collections/show', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId).populate('favorites');
+    res.render('collections/show', { cars: user.favorites });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error retrieving collection');
+  }
+});
+
 
 app.use(isSignedIn);
 app.use('/stylesheets', express.static('stylesheets'));

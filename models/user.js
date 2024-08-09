@@ -15,10 +15,10 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    favoriteCars: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Car'
-    }]
+    favorites: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Car'
+    }]  
     // Add more fields as needed
 });
 

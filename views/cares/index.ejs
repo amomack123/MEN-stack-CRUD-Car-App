@@ -4,12 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <title>All Cars</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
   <%- include('../partials/navbar.ejs') %>
   <a href="/cars/new">add a new car!</a>
 
-  <h1>All Cars</h1>
+  <h1>Your Car Collection</h1>
   <ul>
     <% cars.forEach(car => { %>
       <li>
