@@ -55,6 +55,23 @@ app.get('/', async (req, res) => {
   }
 });
 
+app.get('/cars', async (req, res) => {
+  try {
+    const cars = await Car.find();
+    console.log('User:', req.user); // Debug log
+    const user = req.user || null;
+    res.render('collections/show', { cars, user });
+  } catch (err) {
+    console.error('Error fetching cars:', err);
+    res.status(500).send('Server error');
+  }
+});
+
+app.get('/sign-in', (req, res) => {
+  res.render('sign-in'); 
+});
+
+
 // Route to display all cars
 app.get('/', (req, res) => {
   const userId = req.query.userId;
@@ -177,6 +194,30 @@ app.get('/users/:userId/collections/show', async (req, res) => {
     res.status(500).send('Error retrieving collection');
   }
 });
+
+app.post('/collections/add', async (req, res) => {
+  try {
+    const { userId, carId } = req.body;
+
+    // Find the user and add the car to their collection
+    const user = await User.findById(userId).exec();
+    
+    if (user) {
+      // Check if car is already in the collection
+      if (!user.collection.includes(carId)) {
+        user.collection.push(carId); // Add car to user's collection
+        await user.save(); // Save the user with the updated collection
+      }
+      res.redirect('/cars'); // Redirect or send a response
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
 
 
 app.use(isSignedIn);

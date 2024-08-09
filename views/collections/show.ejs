@@ -1,4 +1,3 @@
-<!-- views/show.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +10,7 @@
 
   <h1>All Available Cars</h1>
   <% if (cars.length === 0) { %>
-    <p>No Cars in your Collection yet.</p>
+    <p>No Cars available at the moment.</p>
   <% } else { %>
     <ul>
       <% cars.forEach(car => { %>
@@ -19,10 +18,17 @@
           <h2><%= car.name %> (<%= car.year %>)</h2>
           <p>Model: <%= car.model %></p>
           <p>Price: $<%= car.price %></p>
-          <form action="/collections/add" method="POST">
-            <input type="hidden" name="carId" value="<%= car._id %>">
-            <button type="submit">❤️ Add to Collection</button>
-          </form>
+          
+          <!-- Add to Collection Form -->
+          <% if (user) { %>
+            <form action="/collections/add" method="POST">
+              <input type="hidden" name="userId" value="<%= user._id %>">
+              <input type="hidden" name="carId" value="<%= car._id %>">
+              <button type="submit">❤️ Add to Collection</button>
+            </form>
+          <% } else { %>
+            <p>Please <a href="/sign-in">log in</a> to add cars to your collection.</p>
+          <% } %>
         </li>
       <% }) %>
     </ul>
