@@ -14,7 +14,7 @@ const isSignedIn = require('./middleware/is-signed-in.js');
 const passUserToHome = require('./middleware/pass-user-to-home.js');
 
 // Import your Car model
-const Car = require('./models/car.js'); // Make sure this path is correct
+const Car = require('./models/cars.js'); // Make sure this path is correct
 const User = require('./models/user.js');
 
 const port = process.env.PORT || '3000';
