@@ -55,34 +55,26 @@ app.get('/', async (req, res) => {
   }
 });
 
+
 app.get('/cars', async (req, res) => {
   try {
-    const cars = await Car.find();
-    console.log('User:', req.user); // Debug log
-    const user = req.user || null;
-    res.render('collections/show', { cars, user });
+    const cars = await Car.find(); // Fetch all cars
+    const user = req.session.user || null; // Get user from session
+    res.render('collections/show', { cars, user }); // Render show.ejs in the collections folder
   } catch (err) {
-    console.error('Error fetching cars:', err);
-    res.status(500).send('Server error');
+    console.error('Error retrieving cars:', err);
+    res.status(500).send('Error retrieving cars');
   }
 });
 
+
+
+
+
 app.get('/sign-in', (req, res) => {
-  res.render('sign-in'); 
+  res.render('auth/sign-in'); 
 });
 
-
-// Route to display all cars
-app.get('/', (req, res) => {
-  const userId = req.query.userId;
-  Car.find({ userId: userId }, (err, cars) => {
-    if (err) {
-      // Handle error
-      return res.status(500).send('Error occurred');
-    }
-    res.render('cars', { cars: cars });
-  });
-});
 
 // Route to render the new car form
 app.get('/collections/new', (req, res) => {
@@ -120,17 +112,6 @@ app.get('/collections/show', async (req, res) => {
 // Routes
 app.use('/auth', authController);
 app.use('/cars', carsController);
-
-// The route to render the index page with the list of cars
-app.get('/cars', async (req, res) => {
-  try {
-    const cars = await Car.find(); // Query all cars from your MongoDB collection
-    res.render('collections/show', { cars }); // Pass the cars and user to your EJS template
-  } catch (err) {
-    console.log('Error retrieving cars:', err);
-    res.status(500).send('Error retrieving cars');
-  }
-});
 
 
 
@@ -187,28 +168,43 @@ app.post('/users/:userId/cars/:carId/favorite', async (req, res) => {
 // Route to display the car collection for a user
 app.get('/users/:userId/collections/show', async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId).populate('favorites');
-    res.render('collections/show', { cars: user.favorites });
+    const userId = req.params.userId;
+    console.log(`Fetching collection for user: ${userId}`);
+    
+    const user = await User.findById(userId).populate('favorites').exec(); // Populate favorites with car details
+    
+    if (user) {
+      console.log(`User's collection: ${JSON.stringify(user.favorites)}`);
+      res.render('collections/show', { cars: user.favorites, user });
+    } else {
+      res.status(404).send('User not found');
+    }
   } catch (err) {
     console.error(err);
     res.status(500).send('Error retrieving collection');
   }
 });
 
+
+
+
 app.post('/collections/add', async (req, res) => {
   try {
     const { userId, carId } = req.body;
-
-    // Find the user and add the car to their collection
-    const user = await User.findById(userId).exec();
     
+    console.log(`User ID: ${userId}`);
+    console.log(`Car ID: ${carId}`);
+    
+    const user = await User.findById(userId).exec();
     if (user) {
-      // Check if car is already in the collection
-      if (!user.collection.includes(carId)) {
-        user.collection.push(carId); // Add car to user's collection
-        await user.save(); // Save the user with the updated collection
+      if (!user.favorites.includes(carId)) { // Check if the car is not already in favorites
+        user.favorites.push(carId);
+        await user.save();
+        console.log(`Car ${carId} added to user ${userId}'s collection`);
+      } else {
+        console.log(`Car ${carId} is already in user ${userId}'s collection`);
       }
-      res.redirect('/cars'); // Redirect or send a response
+      res.redirect(`/users/${userId}/collections/show`); // Redirect to the user's collection page
     } else {
       res.status(404).send('User not found');
     }
@@ -220,10 +216,29 @@ app.post('/collections/add', async (req, res) => {
 
 
 
+
+
+
+
+
+app.post('/sign-in', async (req, res) => {
+  const authenticatedUser = await authenticateUser(req.body);
+
+  if (authenticatedUser) {
+    req.session.user = authenticatedUser; // Save user in session
+    res.redirect('/');
+  } else {
+    res.status(401).send('Invalid credentials');
+  }
+});
+
+
+
+
 app.use(isSignedIn);
 app.use('/stylesheets', express.static('stylesheets'));
+app.use(passUserToHome);
 
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
 });
-

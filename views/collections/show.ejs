@@ -2,36 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Total Cars</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Cars</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
-  <%- include('../partials/navbar') %>
-
-  <h1>All Available Cars</h1>
-  <% if (cars.length === 0) { %>
-    <p>No Cars available at the moment.</p>
+  <%- include('../partials/navbar.ejs') %>
+  <% if (!user) { %>
+    <p>Please sign in to add cars to your collection.</p>
   <% } else { %>
-    <ul>
-      <% cars.forEach(car => { %>
-        <li>
-          <h2><%= car.name %> (<%= car.year %>)</h2>
-          <p>Model: <%= car.model %></p>
-          <p>Price: $<%= car.price %></p>
-          
-          <!-- Add to Collection Form -->
-          <% if (user) { %>
+    <h1>All Cars</h1>
+    <% if (cars.length === 0) { %>
+      <p>No cars available.</p>
+    <% } else { %>
+      <ul>
+        <% cars.forEach(car => { %>
+          <li>
+            <h2><%= car.name %></h2>
+            <p>Model: <%= car.model %></p>
+            <p>Year: <%= car.year %></p>
+            <p>Price: $<%= car.price %></p>
             <form action="/collections/add" method="POST">
               <input type="hidden" name="userId" value="<%= user._id %>">
               <input type="hidden" name="carId" value="<%= car._id %>">
-              <button type="submit">❤️ Add to Collection</button>
+              <button type="submit">Add to Collection</button>
             </form>
-          <% } else { %>
-            <p>Please <a href="/sign-in">log in</a> to add cars to your collection.</p>
-          <% } %>
-        </li>
-      <% }) %>
-    </ul>
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
   <% } %>
+  
 </body>
 </html>

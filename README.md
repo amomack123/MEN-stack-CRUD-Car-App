@@ -3,11 +3,11 @@ Description
 This Car APP is a web application for people to share/sell cars. Users can view, add, edit, and delete cars into their own private car collection - whcih is a collection of cars they like. Users can also mark animals as favorites.
 
 ScreenShots
-![Screenshot 1](images/Screenshot-2024-08-09-at-9.44.57-AM.png)
-![Screenshot 2](images/Screenshot-2024-08-09-at-9.45.06-AM.png)
-![Screenshot 3](images/Screenshot-2024-08-09-at-9.45.14-AM.png)
-![Screenshot 4](images/Screenshot-2024-08-09-at-9.45.37-AM.png)
-![Screenshot 5](images/Screenshot-2024-08-09-at-9.46.14-AM.png)
+![Screenshot 1](images/Home.png)
+![Screenshot 2](images/AllCars.png)
+![Screenshot 3](images/Sign-in.png)
+![Screenshot 4](images/Update.png)
+![Screenshot 5](images/YourCarCollection.png)
 
 Technologies
 ![MongoDB](https://img.shields.io/badge/-MongoDB-05122A?style=flat&logo=mongodb)
